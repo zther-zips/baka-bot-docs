@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>baka Bot - 使用手册</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--vp-c-bg:#ffffff;--vp-c-bg-alt:#f6f6f7;--vp-c-divider:#e2e2e3;--vp-c-text-1:#213547;--vp-c-text-2:#476582;--vp-c-text-3:#6b7280;--vp-c-brand:#646cff;--vp-c-brand-dark:#535bf2;--vp-c-green:#10b981;--vp-c-yellow:#f59e0b;--vp-c-red:#ef4444;--vp-code-bg:#f6f6f7;--vp-code-block-bg:#292d3e;--vp-sidebar-width:272px;--vp-header-height:64px}
+        .dark{--vp-c-bg:#1e1e20;--vp-c-bg-alt:#161618;--vp-c-divider:#2e2e32;--vp-c-text-1:#e1e1e1;--vp-c-text-2:#9ca3af;--vp-c-text-3:#6b7280;--vp-c-brand:#a5b4fc;--vp-code-bg:#2e2e32}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--vp-c-bg);color:var(--vp-c-text-1);line-height:1.6;transition:background .3s,color .3s}
+        .header{position:fixed;top:0;left:0;right:0;height:var(--vp-header-height);background:var(--vp-c-bg);border-bottom:1px solid var(--vp-c-divider);z-index:100;display:flex;align-items:center;padding:0 24px}
+        .header-content{max-width:1440px;width:100%;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+        .logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--vp-c-text-1);font-weight:600;font-size:18px}
+        .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#f472b6,#a78bfa);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+        .header-actions{display:flex;align-items:center;gap:16px}
+        .theme-toggle{width:40px;height:40px;border-radius:8px;border:none;background:var(--vp-c-bg-alt);color:var(--vp-c-text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .theme-toggle:hover{background:var(--vp-c-divider);color:var(--vp-c-text-1)}
+        .layout{display:flex;margin-top:var(--vp-header-height);min-height:calc(100vh - var(--vp-header-height))}
+        .sidebar{position:fixed;left:0;top:var(--vp-header-height);bottom:0;width:var(--vp-sidebar-width);background:var(--vp-c-bg);border-right:1px solid var(--vp-c-divider);overflow-y:auto;padding:24px 0;z-index:99}
+        .sidebar-nav{padding:0 16px}
+        .nav-group{margin-bottom:24px}
+        .nav-group-title{font-size:12px;font-weight:600;color:var(--vp-c-text-3);text-transform:uppercase;letter-spacing:.5px;padding:0 12px 8px}
+        .nav-link{display:block;padding:8px 12px;color:var(--vp-c-text-2);text-decoration:none;border-radius:8px;font-size:14px;transition:all .2s;cursor:pointer}
+        .nav-link:hover{background:var(--vp-c-bg-alt);color:var(--vp-c-text-1)}
+        .nav-link.active{background:var(--vp-c-brand);color:white}
+        .main{flex:1;margin-left:var(--vp-sidebar-width);padding:48px 64px;max-width:1000px}
+        .content-section{display:none}
+        .content-section.active{display:block;animation:fadeIn .3s ease}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        h1{font-size:40px;font-weight:700;margin-bottom:16px;line-height:1.2}
+        h2{font-size:28px;font-weight:600;margin:48px 0 20px;padding-bottom:12px;border-bottom:1px solid var(--vp-c-divider)}
+        h3{font-size:20px;font-weight:600;margin:32px 0 16px}
+        p{margin-bottom:16px;color:var(--vp-c-text-2)}
+        .hero{text-align:center;padding:64px 0}
+        .hero-icon{width:120px;height:120px;margin:0 auto 32px;background:linear-gradient(135deg,#f472b6,#a78bfa,#60a5fa);border-radius:30px;display:flex;align-items:center;justify-content:center;font-size:64px;box-shadow:0 20px 60px rgba(164,100,255,.3)}
+        .hero h1{font-size:56px;margin-bottom:16px;background:linear-gradient(135deg,#f472b6,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero p{font-size:20px;max-width:600px;margin:0 auto 32px}
+        .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-size:16px}
+        .btn-primary{background:var(--vp-c-brand);color:white}
+        .btn-primary:hover{background:var(--vp-c-brand-dark);transform:translateY(-2px)}
+        .btn-secondary{background:var(--vp-c-bg-alt);color:var(--vp-c-text-1);border:1px solid var(--vp-c-divider)}
+        .btn-secondary:hover{border-color:var(--vp-c-brand);color:var(--vp-c-brand)}
+        .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin:48px 0}
+        .feature-card{background:var(--vp-c-bg-alt);border-radius:12px;padding:24px;transition:all .2s}
+        .feature-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.1)}
+        .feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px}
+        .feature-card h3{margin:0 0 8px;font-size:18px}
+        .feature-card p{margin:0;font-size:14px}
+        .code-block{background:var(--vp-code-block-bg);border-radius:12px;margin:20px 0;overflow:hidden}
+        .code-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(0,0,0,.2)}
+        .code-lang{font-size:12px;color:#9ca3af;text-transform:uppercase;font-weight:600}
+        .code-copy{background:transparent;border:none;color:#9ca3af;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;transition:color .2s}
+        .code-copy:hover{color:#fff}
+        pre{padding:16px 20px;overflow-x:auto;margin:0}
+        code{font-family:'JetBrains Mono','Fira Code',Consolas,monospace;font-size:14px;line-height:1.6;color:#a6accd}
+        .code-keyword{color:#c792ea}.code-string{color:#c3e88d}.code-comment{color:#676e95}.code-function{color:#82aaff}.code-number{color:#f78c6c}
+        code.inline{background:var(--vp-code-bg);color:var(--vp-code-color);padding:2px 8px;border-radius:4px;font-size:.9em}
+        .steps{counter-reset:step;margin:24px 0}
+        .step{display:flex;gap:20px;margin-bottom:32px;position:relative}
+        .step::before{counter-increment:step;content:counter(step);width:36px;height:36px;border-radius:50%;background:var(--vp-c-brand);color:white;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+        .step-content{flex:1;padding-top:6px}
+        .step-content h4{font-size:16px;margin-bottom:8px;color:var(--vp-c-text-1)}
+        .info-box{border-radius:12px;padding:20px 24px;margin:24px 0;display:flex;gap:16px;align-items:flex-start}
+        .info-box.tip{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2)}
+        .info-box.warning{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2)}
+        .info-box.danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2)}
+        .info-box-icon{font-size:24px;flex-shrink:0}
+        .info-box-content{flex:1}
+        .info-box-title{font-weight:600;margin-bottom:4px;color:var(--vp-c-text-1)}
+        table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px}
+        th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--vp-c-divider)}
+        th{font-weight:600;color:var(--vp-c-text-1);background:var(--vp-c-bg-alt)}
+        tr:hover td{background:var(--vp-c-bg-alt)}
+        .mobile-menu-btn{display:none;width:40px;height:40px;border-radius:8px;border:none;background:var(--vp-c-bg-alt);color:var(--vp-c-text-2);cursor:pointer;align-items:center;justify-content:center}
+        .footer{margin-top:64px;padding:32px 0;border-top:1px solid var(--vp-c-divider);text-align:center;color:var(--vp-c-text-3);font-size:14px}
+        .footer a{color:var(--vp-c-brand);text-decoration:none}
+        ul{margin:16px 0;padding-left:24px;color:var(--vp-c-text-2)}
+        li{margin-bottom:8px}
+        @media(max-width:1024px){.sidebar{transform:translateX(-100%);transition:transform .3s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:32px 24px}.mobile-menu-btn{display:flex}.hero h1{font-size:40px}}
+        @media(max-width:640px){.hero{padding:32px 0}.hero h1{font-size:32px}h1{font-size:28px}h2{font-size:22px}}
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo" onclick="showSection('home')">
+                <div class="logo-icon">🐾</div>
+                <span>baka Bot</span>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" title="切换主题"><span id="theme-icon">🌙</span></button>
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <div class="nav-group-title">指南</div>
+                    <a class="nav-link active" onclick="showSection('home')">🏠 首页</a>
+                    <a class="nav-link" onclick="showSection('install')">📦 安装部署</a>
+                    <a class="nav-link" onclick="showSection('usage')">🚀 使用指南</a>
+                    <a class="nav-link" onclick="showSection('config')">⚙️ 配置说明</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">功能</div>
+                    <a class="nav-link" onclick="showSection('features')">✨ 功能介绍</a>
+                    <a class="nav-link" onclick="showSection('commands')">⌨️ 指令列表</a>
+                </div>
+                <div class="nav-group">
+                    <div class="nav-group-title">关于</div>
+                    <a class="nav-link" href="https://github.com/zther-zips/baka-Bot" target="_blank">🐙 GitHub</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <!-- Home Section -->
+            <section id="home" class="content-section active">
+                <div class="hero">
+                    <div class="hero-icon">🐾</div>
+                    <h1>baka Bot</h1>
+                    <p>一个基于 NoneBot2 + Moonshot AI 的可爱 QQ 机器人<br>带有好感度系统和持久化记忆</p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="showSection('install')">📖 开始使用</button>
+                        <a href="https://github.com/zther-zips/baka-Bot" class="btn btn-secondary" target="_blank">🐙 GitHub</a>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(244,114,182,.2)">🤖</div>
+                        <h3>AI 智能对话</h3>
+                        <p>基于 Moonshot AI (Kimi) 的智能回复，支持上下文记忆，聊天更自然</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(167,139,250,.2)">💕</div>
+                        <h3>好感度系统</h3>
+                        <p>根据好感度等级改变回复风格，从礼貌到撒娇，培养专属于你的 baka</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(96,165,250,.2)">💾</div>
+                        <h3>持久化记忆</h3>
+                        <p>聊天记录自动保存，重启后也能记住你们的对话历史</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(52,211,153,.2)">👆</div>
+                        <h3>戳一戳响应</h3>
+                        <p>支持 QQ 戳一戳互动，让 baka 更生动可爱</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(251,191,36,.2)">🖼️</div>
+                        <h3>图片保存</h3>
+                        <p>自动保存聊天中的图片，方便后续查看和管理</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(248,113,113,.2)">📝</div>
+                        <h3>日志记录</h3>
+                        <p>完善的日志系统，方便排查问题和了解运行状态</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Install Section -->
+            <section id="install" class="content-section">
+                <h1>📦 安装部署</h1>
+                <p>baka Bot 采用前后端分离架构，需要同时部署 NoneBot2 前端和 NapCat 后端。</p>
+
+                <h2>系统要求</h2>
+                <ul>
+                    <li>Linux 服务器（推荐 Ubuntu/Debian）</li>
+                    <li>Python 3.10+</li>
+                    <li>一个 QQ 小号</li>
+                    <li>Moonshot API Key</li>
+                </ul>
+
+                <h2>一、前端部署（NoneBot2）</h2>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>更新系统软件包</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">apt update</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>安装 Python 环境和必要工具</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">apt install</span> <span class="code-string">python3-venv python3-pip git screen unzip</span> -y</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>下载 baka Bot</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-comment"># 从 GitHub 克隆</span>
+<span class="code-function">git clone</span> <span class="code-string">https://github.com/zther-zips/baka-Bot.git</span>
+
+<span class="code-comment"># 或者本地上传后解压</span>
+<span class="code-function">unzip</span> <span class="code-string">baka-Bot.zip</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>创建并激活虚拟环境</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">cd</span> <span class="code-string">baka-Bot</span>
+<span class="code-function">python3 -m venv</span> <span class="code-string">venv</span>
+<span class="code-function">source</span> <span class="code-string">venv/bin/activate</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>安装依赖</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-comment"># 安装 NoneBot2 和 OneBot 适配器</span>
+<span class="code-function">pip install</span> <span class="code-string">nonebot2[fastapi] nonebot-adapter-onebot</span>
+
+<span class="code-comment"># 安装项目依赖</span>
+<span class="code-function">pip install</span> <span class="code-string">.</span>
+
+<span class="code-comment"># 安装其他依赖（使用清华镜像加速）</span>
+<span class="code-function">pip install</span> <span class="code-string">openai aiofiles</span> -i <span class="code-string">https://pypi.tuna.tsinghua.edu.cn/simple</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>使用 Screen 后台运行</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-comment"># 先退出虚拟环境</span>
+<span class="code-function">deactivate</span>
+
+<span class="code-comment"># 创建 screen 会话</span>
+<span class="code-function">screen -S</span> <span class="code-string">baka</span>
+
+<span class="code-comment"># 进入项目目录并激活环境</span>
+<span class="code-function">cd</span> <span class="code-string">/root/baka-Bot</span>
+<span class="code-function">source</span> <span class="code-string">venv/bin/activate</span>
+
+<span class="code-comment"># 启动 bot</span>
+<span class="code-function">python3</span> <span class="code-string">bot.py</span></code></pre>
+                            </div>
+                            <p>按 <code class="inline">Ctrl+A</code> 再按 <code class="inline">D</code> 分离会话，保持后台运行。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box tip">
+                    <span class="info-box-icon">💡</span>
+                    <div class="info-box-content">
+                        <div class="info-box-title">Screen 常用命令</div>
+                        <p><code class="inline">screen -ls</code> - 查看所有会话 | <code class="inline">screen -r baka</code> - 回到 baka 会话 | <code class="inline">screen -wipe</code> - 清理死会话</p>
+                    </div>
+                </div>
+
+                <h2>二、后端部署（NapCat）</h2>
+                
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>安装 NapCat</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">curl -o</span> <span class="code-string">napcat.sh</span> \n  <span class="code-string">https://nclatest.znin.net/NapNeko/NapCat-Installer/main/script/install.sh</span> \n  && <span class="code-function">bash</span> <span class="code-string">napcat.sh --tui</span></code></pre>
+                            </div>
+                            <p>或使用 CLI 模式安装：<code class="inline">bash napcat.sh --cli y</code></p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>获取 WebUI Token</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">cat</span> <span class="code-string">/root/Napcat/opt/QQ/resources/app/app_launcher/napcat/config/webui.json</span></code></pre>
+                            </div>
+                            <p>记录下其中的 token，用于登录 WebUI。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>配置端口映射（如需要）</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-comment"># 本地 SSH 映射到服务器端口</span>
+<span class="code-function">ssh -L</span> <span class="code-number">6099:127.0.0.1:6099</span> <span class="code-string">root@你的服务器IP</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>启动 NapCat</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-comment"># 创建 screen 会话启动 NapCat</span>
+<span class="code-function">screen -S</span> <span class="code-string">napcat</span>
+
+<span class="code-comment"># 启动 NapCat（替换为你的 QQ 号）</span>
+<span class="code-function">xvfb-run -a</span> <span class="code-string">/root/Napcat/opt/QQ/qq</span> <span class="code-string">--no-sandbox -q 你的QQ号</span>
+
+<span class="code-comment"># 按 Ctrl+A 再按 D 分离会话</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>配置 WebSocket 连接</h4>
+                            <p>打开浏览器访问 WebUI：</p>
+                            <ul>
+                                <li>本地映射：<code class="inline">http://127.0.0.1:6099</code></li>
+                                <li>直接访问：<code class="inline">http://服务器IP:6099/webui/</code></li>
+                            </ul>
+                            <p>输入 token 登录后，在网络设置中：</p>
+                            <ol>
+                                <li>新建 WebSocket 客户端</li>
+                                <li>启用连接</li>
+                                <li>名称填：baka</li>
+                                <li>URL 填：<code class="inline">ws://127.0.0.1:8080/onebot/v11/ws</code></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box warning">
+                    <span class="info-box-icon">⚠️</span>
+                    <div class="info-box-content">
+                        <div class="info-box-title">注意</div>
+                        <p>请确保 8080 端口未被占用，这是 NoneBot2 默认的 WebSocket 端口。如果需要修改，请在 <code class="inline">.env</code> 文件中配置。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usage Section -->
+            <section id="usage" class="content-section">
+                <h1>🚀 使用指南</h1>
+                <p>部署完成后，你就可以开始和 baka 聊天啦～</p>
+
+                <h2>启动顺序</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>启动后端（NapCat）</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">screen -dmS</span> <span class="code-string">napcat</span> <span class="code-function">bash -c</span> <span class="code-string">"xvfb-run -a /root/Napcat/opt/QQ/qq --no-sandbox -q 你的QQ号"</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-content">
+                            <h4>启动前端（baka Bot）</h4>
+                            <div class="code-block">
+                                <div class="code-header"><span class="code-lang">bash</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                                <pre><code><span class="code-function">screen -S</span> <span class="code-string">baka</span>
+<span class="code-function">cd</span> <span class="code-string">/root/baka</span>
+<span class="code-function">source</span> <span class="code-string">venv/bin/activate</span>
+<span class="code-function">python3</span> <span class="code-string">bot.py</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>日常管理命令</h2>
+                <table>
+                    <tr><th>操作</th><th>命令</th></tr>
+                    <tr><td>查看所有会话</td><td><code class="inline">screen -ls</code></td></tr>
+                    <tr><td>进入 baka 会话</td><td><code class="inline">screen -r baka</code></td></tr>
+                    <tr><td>进入 napcat 会话</td><td><code class="inline">screen -r napcat</code></td></tr>
+                    <tr><td>分离会话（后台保持）</td><td><code class="inline">Ctrl+A</code> 然后 <code class="inline">D</code></td></tr>
+                    <tr><td>结束运行</td><td><code class="inline">Ctrl+C</code></td></tr>
+                    <tr><td>停止 napcat 会话</td><td><code class="inline">screen -S napcat -X quit</code></td></tr>
+                    <tr><td>清理死会话</td><td><code class="inline">screen -wipe</code></td></tr>
+                </table>
+
+                <h2>与 baka 互动</h2>
+                <ul>
+                    <li><strong>提及回复：</strong>在消息中包含 "baka" 或 @机器人，即可触发 AI 回复</li>
+                    <li><strong>私聊：</strong>直接发送消息给机器人，无需特殊格式</li>
+                    <li><strong>戳一戳：</strong>双击机器人头像戳一戳，会有可爱回应</li>
+                </ul>
+
+                <div class="info-box tip">
+                    <span class="info-box-icon">💡</span>
+                    <div class="info-box-content">
+                        <div class="info-box-title">好感度小贴士</div>
+                        <p>经常和 baka 聊天可以提升好感度哦～好感度越高，baka 对你越亲昵！好感度数据保存在 <code class="inline">favorability.json</code> 文件中。</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Config Section -->
+            <section id="config" class="content-section">
+                <h1>⚙️ 配置说明</h1>
+                <p>baka Bot 的配置主要通过环境变量和配置文件进行。</p>
+
+                <h2>环境变量配置 (.env)</h2>
+                <div class="code-block">
+                    <div class="code-header"><span class="code-lang">env</span><button class="code-copy" onclick="copyCode(this)">📋 复制</button></div>
+                    <pre><code><span class="code-comment"># 运行环境</span>
+<span class="code-keyword">ENVIRONMENT</span>=<span class="code-string">prod</span>
+
+<span class="code-comment"># Moonshot API Key（必填）</span>
+<span class="code-keyword">MOONSHOT_API_KEY</span>=<span class="code-string">your-api-key-here</span>
+
+<span class="code-comment"># 超级用户 QQ 号（可选）</span>
+<span class="code-keyword">SUPERUSERS</span>=<span class="code-string">["123456789"]</span>
+
+<span class="code-comment"># 命令起始字符（可选）</span>
+<span class="code-keyword">COMMAND_START</span>=<span class="code-string">["/"]</span></code></pre>
+                </div>
+
+                <h2>获取 Moonshot API Key</h2>
+                <ol>
+                    <li>访问 <a href="https://platform.moonshot.cn/" target="_blank">Moonshot 开放平台</a></li>
+                    <li>注册并登录账号</li>
+                    <li>进入「API Key 管理」页面</li>
+                    <li>创建新的 API Key</li>
+                    <li>将 Key 复制到 <code class="inline">.env</code> 文件中</li>
+                </ol>
+
+                <div class="info-box danger">
+                    <span class="info-box-icon">🔒</span>
+                    <div class="info-box-content">
+                        <div class="info-box-title">安全提示</div>
+                        <p>请勿将包含 API Key 的 <code class="inline">.env</code> 文件提交到 Git 仓库！建议在 <code class="inline">.gitignore</code> 中添加 <code class="inline">.env</code>。</p>
+                    </div>
+                </div>
+
+                <h2>数据文件</h2>
+                <table>
+                    <tr><th>文件</th><th>说明</th></tr>
+                    <tr><td><code class="inline">chat_history.json</code></td><td>聊天记录保存</td></tr>
+                    <tr><td><code class="inline">favorability.json</code></td><td>用户好感度数据</td></tr>
+                    <tr><td><code class="inline">chat_logs/</code></td><td>日志文件目录</td></tr>
+                    <tr><td><code class="inline">saved_images/</code></td><td>保存的图片目录</td></tr>
+                </table>
+
+                <h2>好感度等级</h2>
+                <table>
+                    <tr><th>等级</th><th>好感度范围</th><th>描述</th></tr>
+                    <tr><td>普通朋友</td><td>0 - 200</td><td>语气礼貌温柔，是个笨笨的猫猫</td></tr>
+                    <tr><td>情投意合</td><td>201 - 500</td><td>你是TA最好的知己，说话随性亲昵</td></tr>
+                    <tr><td>至死不渝</td><td>500+</td><td>你超级爱TA，极度依赖且爱撒娇</td></tr>
+                </table>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="content-section">
+                <h1>✨ 功能介绍</h1>
+
+                <h2>🤖 AI 智能对话</h2>
+                <p>基于 Moonshot AI (Kimi) 实现，支持多轮对话上下文记忆。baka 会根据聊天历史理解语境，给出自然流畅的回复。</p>
+                <ul>
+                    <li>支持上下文记忆（最多保存最近 10 条对话）</li>
+                    <li>自动识别提及和 @ 消息</li>
+                    <li>私聊无需触发词，直接对话</li>
+                    <li>群聊需要包含 "baka" 或 @机器人</li>
+                </ul>
+
+                <h2>💕 好感度系统</h2>
+                <p>每个用户都有独立的好感度值，baka 会根据好感度调整回复风格：</p>
+                <ul>
+                    <li>好感度越高，回复越亲昵撒娇</li>
+                    <li>数据持久化保存，重启不丢失</li>
+                    <li>可以手动修改 favorability.json 调整好感度</li>
+                </ul>
+
+                <h2>👆 戳一戳响应</h2>
+                <p>支持 QQ 戳一戳功能，当用户戳 baka 时会有可爱的回应。</p>
+
+                <h2>🖼️ 图片保存</h2>
+                <p>自动检测并保存聊天中的图片到本地，方便后续管理和查看。</p>
+
+                <h2>📝 日志记录</h2>
+                <p>完整的日志系统，记录所有聊天内容，方便调试和回顾。</p>
+            </section>
+
+            <!-- Commands Section -->
+            <section id="commands" class="content-section">
+                <h1>⌨️ 指令列表</h1>
+                <p>baka Bot 主要使用自然语言交互。</p>
+
+                <h2>触发方式</h2>
+                <table>
+                    <tr><th>场景</th><th>触发方式</th><th>示例</th></tr>
+                    <tr><td>群聊</td><td>提及 "baka" 或 @机器人</td><td>baka 你好呀</td></tr>
+                    <tr><td>私聊</td><td>直接发送消息</td><td>今天天气怎么样</td></tr>
+                    <tr><td>戳一戳</td><td>双击头像</td><td>-</td></tr>
+                </table>
+
+                <div class="info-box tip">
+                    <span class="info-box-icon">💡</span>
+                    <div class="info-box-content">
+                        <div class="info-box-title">扩展功能</div>
+                        <p>baka Bot 基于 NoneBot2 框架，可以通过安装插件来扩展功能。访问 <a href="https://nonebot.dev/" target="_blank">NoneBot 插件商店</a> 寻找更多插件。</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer">
+                <p>Made with 💕 by baka | <a href="https://github.com/zther-zips/baka-Bot" target="_blank">GitHub</a></p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // 主题切换
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const icon = document.getElementById('theme-icon');
+            icon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+            localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        // 页面加载时恢复主题
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById('theme-icon').textContent = '☀️';
+        }
+
+        // 侧边栏切换
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // 显示指定章节
+        function showSection(sectionId) {
+            // 隐藏所有章节
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            // 显示指定章节
+            document.getElementById(sectionId).classList.add('active');
+            // 更新导航激活状态
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            // 关闭移动端侧边栏
+            document.getElementById('sidebar').classList.remove('open');
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        // 复制代码
+        function copyCode(btn) {
+            const code = btn.closest('.code-block').querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const original = btn.innerText;
+                btn.innerText = '✅ 已复制';
+                setTimeout(() => btn.innerText = original, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
